@@ -398,13 +398,13 @@ class ModelRunner(object):
 
     def run_hook(self, name, context, *args):
         if not self.config.dry_run and (name in self.hooks):
-            # try:
-            with context.user_mode():
-                self.hooks[name](context, *args)
-            # except KeyboardInterrupt:
-            #     self.aborted = True
-            #     if name not in ("before_all", "after_all"):
-            #         raise
+            try:
+                with context.user_mode():
+                    self.hooks[name](context, *args)
+            except KeyboardInterrupt:
+                self.aborted = True
+                if name not in ("before_all", "after_all"):
+                    raise
 
     def setup_capture(self):
         if not self.context:

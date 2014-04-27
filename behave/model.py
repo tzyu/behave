@@ -460,7 +460,11 @@ class Feature(TagAndStatusStatement, Replayable):
                 scenario.mark_skipped()
                 continue
 
-            failed = scenario.run(runner)
+            try:
+                failed = scenario.run(runner)
+            except Exception:
+                import traceback; traceback.print_exc()
+                failed = True
             if failed:
                 failed_count += 1
                 if runner.config.stop or runner.aborted:
